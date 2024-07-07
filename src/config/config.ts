@@ -24,7 +24,7 @@ const config = convict({
       doc: 'Database port',
       format: 'port',
       default: 5432,
-      env: 'DB_HOST',
+      env: 'DB_PORT',
     },
     name: {
       doc: 'Database name',
@@ -41,7 +41,7 @@ const config = convict({
     password: {
       doc: 'Database password',
       format: String,
-      default: 'miatu',
+      default: '',
       env: 'DB_PASSWORD',
       sensitive: true,
     },

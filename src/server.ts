@@ -21,6 +21,7 @@ export default class Server {
     logger.debug('Server.ctor');
 
     this.validateConfig();
+    this.printConfig();
     this.createServices();
     this.createRouters();
     this.createApp();
@@ -38,6 +39,12 @@ export default class Server {
     logger.debug('Server.validate config');
 
     config.validate({ allowed: 'strict' });
+  }
+
+  private printConfig() {
+    logger.debug('Server.print config');
+
+    logger.info('config:', config.getProperties());
   }
 
   private createServices() {
