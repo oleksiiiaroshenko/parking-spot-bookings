@@ -3,6 +3,7 @@ import { HttpError } from 'http-errors';
 import { logger } from '../config';
 import { ResponseHelper } from '../utils';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default (error: HttpError, req: Request, res: Response, next: NextFunction) => {
   logger.error({ error });
 

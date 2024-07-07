@@ -1,7 +1,7 @@
 import { createLogger, format, transports } from 'winston';
 import { config } from '.';
 
-const { combine, timestamp, printf, colorize } = format;
+const { combine, timestamp, colorize } = format;
 
 const logger = createLogger({
   format: combine(colorize(), timestamp(), format.json()),

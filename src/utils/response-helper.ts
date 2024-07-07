@@ -1,7 +1,7 @@
 import { Response } from 'express';
 
 export class ResponseHelper {
-  static success(res: Response, data: any, statusCode: number = 200) {
+  static success<T>(res: Response, data: T, statusCode: number = 200) {
     return res.status(statusCode).json({
       status: 'success',
       data,

@@ -1,10 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { BookingService } from '../services';
 import { CreateBookingDto, UpdateBookingDto } from '../dtos';
 import { logger } from '../config';
 import { ResponseHelper } from '../utils';
 import { IUserRequest } from '../interfaces';
-import { plainToClass, plainToInstance } from 'class-transformer';
 
 export class BookingController {
   private bookingService: BookingService;

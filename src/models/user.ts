@@ -1,6 +1,5 @@
 import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, HasMany } from 'sequelize-typescript';
 import { Booking } from '.';
-import _ from 'lodash';
 
 @Table({
   timestamps: false,
