@@ -7,7 +7,7 @@ import { WhereOptions } from 'sequelize';
 
 interface ModelStatic<T extends Model> extends ModelCtor<T> {}
 
-export class Database<T extends Model> {
+class Database<T extends Model> {
   private model: ModelStatic<T>;
 
   constructor(model: ModelStatic<T>) {

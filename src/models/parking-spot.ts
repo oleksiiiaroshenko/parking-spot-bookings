@@ -1,7 +1,9 @@
-import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, HasMany } from "sequelize-typescript";
-import { Booking } from ".";
+import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, HasMany } from 'sequelize-typescript';
+import { Booking } from '.';
 
-@Table
+@Table({
+  timestamps: false,
+})
 export class ParkingSpot extends Model {
   @PrimaryKey
   @AutoIncrement

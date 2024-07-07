@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { UserRole } from '../enums';
 
-const userCreationSchema = Joi.object({
+export const userCreationSchema = Joi.object({
   firstName: Joi.string().alphanum().min(3).max(30).required(),
   lastName: Joi.string().alphanum().min(3).max(30).required(),
   email: Joi.string().email().required(),
@@ -11,7 +11,7 @@ const userCreationSchema = Joi.object({
   .required()
   .unknown(false);
 
-const userUpdateSchema = Joi.object({
+export const userUpdateSchema = Joi.object({
   firstName: Joi.string().alphanum().min(3).max(30).optional(),
   lastName: Joi.string().alphanum().min(3).max(30).optional(),
   email: Joi.string().email().optional(),
@@ -21,5 +21,3 @@ const userUpdateSchema = Joi.object({
   .or('firstName', 'lastName', 'email', 'role', 'token')
   .required()
   .unknown(false);
-
-export { userCreationSchema, userUpdateSchema };

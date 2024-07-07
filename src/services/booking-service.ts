@@ -17,6 +17,11 @@ export class BookingService {
   async createBooking(userId: number, createBookingDto: CreateBookingDto): Promise<Booking> {
     logger.debug('BookingService.create booking:', { userId, createBookingDto });
 
+    const parkingSpot = await this.databaseService.parkingSpots.findById(createBookingDto.parkingSpotId);
+    if (!parkingSpot) {
+      throw new createError.BadRequest('Invalid parking spot id');
+    }
+
     const booking = await this.databaseService.bookings.create({ userId, ...createBookingDto });
     return booking;
   }
@@ -49,6 +54,10 @@ export class BookingService {
 
     if (booking.userId !== user.id && user.role !== UserRole.ADMIN) {
       throw new createError.Forbidden('Access denied');
+    }
+
+    if (updateBookingDto.endDateTime < booking.startDateTime) {
+      throw new createError.BadRequest('End date time cannot be before start date');
     }
 
     return this.databaseService.bookings.update(booking, updateBookingDto);

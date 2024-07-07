@@ -1,16 +1,17 @@
 import Joi from 'joi';
 
-const bookingCreationSchema = Joi.object({
-  userId: Joi.number().integer().positive().required(),
+export const bookingCreationSchema = Joi.object({
   parkingSpotId: Joi.number().integer().positive().required(),
   startDateTime: Joi.date().required(),
-  endDateTime: Joi.date().required(),
-  firstName: Joi.string().alphanum().min(3).max(30).required(),
-  lastName: Joi.string().alphanum().min(3).max(30).required(),
+  endDateTime: Joi.date().required().greater(Joi.ref('startDateTime')).messages({
+    'date.greater': 'End date must be greater than start date',
+  }),
 })
   .required()
   .unknown(false);
 
-const bookingUpdateSchema = Joi.object({}).required(); // todo
-
-export { bookingCreationSchema, bookingUpdateSchema };
+export const bookingUpdateSchema = Joi.object({
+  endDateTime: Joi.date().required(),
+})
+  .required()
+  .unknown(false);

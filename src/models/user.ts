@@ -2,7 +2,9 @@ import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, HasMany } fr
 import { Booking } from '.';
 import _ from 'lodash';
 
-@Table
+@Table({
+  timestamps: false,
+})
 export class User extends Model {
   @PrimaryKey
   @AutoIncrement

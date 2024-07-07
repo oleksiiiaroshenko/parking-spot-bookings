@@ -4,6 +4,7 @@ import { CreateBookingDto, UpdateBookingDto } from '../dtos';
 import { logger } from '../config';
 import { ResponseHelper } from '../utils';
 import { IUserRequest } from '../interfaces';
+import { plainToClass, plainToInstance } from 'class-transformer';
 
 export class BookingController {
   private bookingService: BookingService;
@@ -16,9 +17,13 @@ export class BookingController {
 
   async createBooking(req: IUserRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const createBookingDto: CreateBookingDto = req.body;
+      const createBookingDto: CreateBookingDto = {
+        ...req.body,
+        startDateTime: new Date(req.body.startDateTime),
+        endDateTime: new Date(req.body.endDateTime),
+      };
 
-      const booking = await this.bookingService.createBooking(req.user?.id!, createBookingDto);
+      const booking = await this.bookingService.createBooking(req.user!.id!, createBookingDto);
 
       ResponseHelper.success(res, booking, 201);
     } catch (error) {
@@ -48,7 +53,10 @@ export class BookingController {
 
   async updateBooking(req: IUserRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const updateBookingDto: UpdateBookingDto = req.body;
+      const updateBookingDto: UpdateBookingDto = {
+        ...req.body,
+        endDateTime: new Date(req.body.endDateTime),
+      };
 
       const booking = await this.bookingService.updateBooking(req.user!, req.params.id, updateBookingDto);
 
