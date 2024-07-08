@@ -6,11 +6,14 @@ import { logger } from '../config';
 import { IDatabaseService, IParkingSpotService } from '../interfaces';
 
 export class ParkingSpotRouter {
+  private readonly path: string;
   private router!: Router;
   private controller!: ParkingSpotController;
 
   constructor(databaseService: IDatabaseService, parkingSpotService: IParkingSpotService) {
     logger.debug('ParkingSpotRouter.ctor');
+
+    this.path = '/parking-spots';
 
     this.createController(parkingSpotService);
     this.createRouter(databaseService);
@@ -34,19 +37,19 @@ export class ParkingSpotRouter {
     this.router = Router();
 
     this.router.post(
-      '/parking-spots',
+      `${this.path}`,
       authMiddleware(databaseService),
       bodyValidationMiddleware(parkingSpotCreationSchema),
       this.controller.createParkingSpot.bind(this.controller),
     );
-    this.router.get('/parking-spots', this.controller.getParkingSpots.bind(this.controller));
-    this.router.get('/parking-spots/:id', this.controller.getParkingSpot.bind(this.controller));
+    this.router.get(`${this.path}`, this.controller.getParkingSpots.bind(this.controller));
+    this.router.get(`${this.path}/:id`, this.controller.getParkingSpot.bind(this.controller));
     this.router.put(
-      '/parking-spots/:id',
+      `${this.path}/:id`,
       authMiddleware(databaseService),
       bodyValidationMiddleware(parkingSpotUpdateSchema),
       this.controller.updateParkingSpot.bind(this.controller),
     );
-    this.router.delete('/parking-spots/:id', authMiddleware(databaseService), this.controller.deleteParkingSpot.bind(this.controller));
+    this.router.delete(`${this.path}/:id`, authMiddleware(databaseService), this.controller.deleteParkingSpot.bind(this.controller));
   }
 }

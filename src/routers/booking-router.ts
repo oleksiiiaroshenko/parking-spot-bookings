@@ -6,11 +6,14 @@ import { logger } from '../config';
 import { IBookingService, IDatabaseService } from '../interfaces';
 
 export class BookingRouter {
+  private readonly path: string;
   private router!: Router;
   private controller!: BookingController;
 
   constructor(databaseService: IDatabaseService, bookingService: IBookingService) {
     logger.debug('BookingRouter.ctor');
+
+    this.path = '/bookings';
 
     this.createController(bookingService);
     this.createRouter(databaseService);
@@ -35,10 +38,10 @@ export class BookingRouter {
 
     this.router.use(authMiddleware(databaseService));
 
-    this.router.post('/bookings', bodyValidationMiddleware(bookingCreationSchema), this.controller.createBooking.bind(this.controller));
-    this.router.get('/bookings', this.controller.getBookings.bind(this.controller));
-    this.router.get('/bookings/:id', this.controller.getBooking.bind(this.controller));
-    this.router.put('/bookings/:id', bodyValidationMiddleware(bookingUpdateSchema), this.controller.updateBooking.bind(this.controller));
-    this.router.delete('/bookings/:id', this.controller.deleteBooking.bind(this.controller));
+    this.router.post(`${this.path}`, bodyValidationMiddleware(bookingCreationSchema), this.controller.createBooking.bind(this.controller));
+    this.router.get(`${this.path}`, this.controller.getBookings.bind(this.controller));
+    this.router.get(`${this.path}/:id`, this.controller.getBooking.bind(this.controller));
+    this.router.put(`${this.path}/:id`, bodyValidationMiddleware(bookingUpdateSchema), this.controller.updateBooking.bind(this.controller));
+    this.router.delete(`${this.path}/:id`, this.controller.deleteBooking.bind(this.controller));
   }
 }
