@@ -2,9 +2,9 @@ import { Response, NextFunction } from 'express';
 import { CreateBookingDto, UpdateBookingDto } from '../dtos';
 import { logger } from '../config';
 import { ResponseHelper } from '../utils';
-import { IBookingService, IUserRequest } from '../interfaces';
+import { IBookingController, IBookingService, IUserRequest } from '../interfaces';
 
-export class BookingController {
+export class BookingController implements IBookingController {
   private bookingService: IBookingService;
 
   constructor(bookingService: IBookingService) {

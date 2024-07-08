@@ -1,21 +1,21 @@
 import { Router } from 'express';
 import { authMiddleware, bodyValidationMiddleware } from '../middlewares';
 import { userCreationSchema, userUpdateSchema } from '../validation-schemas';
-import { UserController } from '../controllers';
 import { logger } from '../config';
-import { IDatabaseService, IUserService } from '../interfaces';
+import { IDatabaseService, IUserController } from '../interfaces';
 
 export class UserRouter {
   private readonly path: string;
   private router!: Router;
-  private controller!: UserController;
 
-  constructor(databaseService: IDatabaseService, userService: IUserService) {
+  constructor(
+    private readonly controller: IUserController,
+    databaseService: IDatabaseService,
+  ) {
     logger.debug('UserRouter.ctor');
 
     this.path = '/users';
 
-    this.createController(userService);
     this.createRouter(databaseService);
   }
 
@@ -23,12 +23,6 @@ export class UserRouter {
     logger.debug('UserRouter.get routes');
 
     return this.router;
-  }
-
-  private createController(userService: IUserService): void {
-    console.log('UserRouter.create controller');
-
-    this.controller = new UserController(userService);
   }
 
   private createRouter(databaseService: IDatabaseService): void {

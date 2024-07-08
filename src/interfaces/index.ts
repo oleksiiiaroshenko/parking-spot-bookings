@@ -4,3 +4,6 @@ export { IDatabaseService } from './idatabase-service';
 export { IUserService } from './iuser-service';
 export { IParkingSpotService } from './iparking-spot-service';
 export { IBookingService } from './ibooking-service';
+export { IUserController } from './iuser-controller';
+export { IParkingSpotController } from './iparking-spot-controller';
+export { IBookingController } from './ibooking-controller';

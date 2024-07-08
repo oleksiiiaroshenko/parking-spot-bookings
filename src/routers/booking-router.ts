@@ -1,21 +1,19 @@
 import { Router } from 'express';
 import { authMiddleware, bodyValidationMiddleware } from '../middlewares';
 import { bookingCreationSchema, bookingUpdateSchema } from '../validation-schemas';
-import { BookingController } from '../controllers';
 import { logger } from '../config';
-import { IBookingService, IDatabaseService } from '../interfaces';
+import { IBookingController, IDatabaseService } from '../interfaces';
 
 export class BookingRouter {
-  private readonly path: string;
+  private readonly path = '/bookings';
   private router!: Router;
-  private controller!: BookingController;
 
-  constructor(databaseService: IDatabaseService, bookingService: IBookingService) {
+  constructor(
+    private readonly controller: IBookingController,
+    databaseService: IDatabaseService,
+  ) {
     logger.debug('BookingRouter.ctor');
 
-    this.path = '/bookings';
-
-    this.createController(bookingService);
     this.createRouter(databaseService);
   }
 
@@ -23,12 +21,6 @@ export class BookingRouter {
     logger.debug('BookingRouter.get routes');
 
     return this.router;
-  }
-
-  private createController(bookingService: IBookingService): void {
-    console.log('BookingRouter.create controller');
-
-    this.controller = new BookingController(bookingService);
   }
 
   private createRouter(databaseService: IDatabaseService): void {

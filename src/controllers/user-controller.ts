@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { CreateUserDto, UpdateUserDto } from '../dtos';
 import { logger } from '../config';
 import { ResponseHelper } from '../utils';
-import { IUserRequest, IUserService } from '../interfaces';
+import { IUserController, IUserRequest, IUserService } from '../interfaces';
 
-export class UserController {
+export class UserController implements IUserController {
   private readonly userService: IUserService;
 
   constructor(userService: IUserService) {

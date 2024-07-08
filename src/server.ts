@@ -7,6 +7,7 @@ import { errorHandler } from './middlewares';
 import createError from 'http-errors';
 import { UserRouter, ParkingSpotRouter, BookingRouter } from './routers';
 import { IBookingService, IDatabaseService, IParkingSpotService, IUserService } from './interfaces';
+import { BookingController, ParkingSpotController, UserController } from './controllers';
 
 export default class Server {
   private app!: Express;
@@ -17,6 +18,9 @@ export default class Server {
   private userRouter!: UserRouter;
   private parkingSpotRouter!: ParkingSpotRouter;
   private bookingRouter!: BookingRouter;
+  private userController!: UserController;
+  private parkingSpotController!: ParkingSpotController;
+  private bookingController!: BookingController;
 
   constructor() {
     logger.debug('Server.ctor');
@@ -24,6 +28,7 @@ export default class Server {
     this.validateConfig();
     this.printConfig();
     this.createServices();
+    this.createControllers();
     this.createRouters();
     this.createApp();
   }
@@ -57,12 +62,20 @@ export default class Server {
     this.bookingService = new BookingService(this.databaseService);
   }
 
+  private createControllers() {
+    logger.debug('Server.create controllers');
+
+    this.userController = new UserController(this.userService);
+    this.parkingSpotController = new ParkingSpotController(this.parkingSpotService);
+    this.bookingController = new BookingController(this.bookingService);
+  }
+
   private createRouters() {
     logger.debug('Server.create routers');
 
-    this.userRouter = new UserRouter(this.databaseService, this.userService);
-    this.parkingSpotRouter = new ParkingSpotRouter(this.databaseService, this.parkingSpotService);
-    this.bookingRouter = new BookingRouter(this.databaseService, this.bookingService);
+    this.userRouter = new UserRouter(this.userController, this.databaseService);
+    this.parkingSpotRouter = new ParkingSpotRouter(this.parkingSpotController, this.databaseService);
+    this.bookingRouter = new BookingRouter(this.bookingController, this.databaseService);
   }
 
   private createApp() {
