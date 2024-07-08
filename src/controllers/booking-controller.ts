@@ -22,7 +22,7 @@ export class BookingController {
         endDateTime: new Date(req.body.endDateTime),
       };
 
-      const booking = await this.bookingService.createBooking(req.user!.id!, createBookingDto);
+      const booking = await this.bookingService.createBooking(req.user!.id, createBookingDto);
 
       ResponseHelper.success(res, booking, 201);
     } catch (error) {
