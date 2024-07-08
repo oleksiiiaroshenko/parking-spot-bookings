@@ -5,12 +5,10 @@ import { config, logger } from '../config';
 import createError from 'http-errors';
 import { WhereOptions } from 'sequelize';
 
-interface ModelStatic<T extends Model> extends ModelCtor<T> {}
-
 class Database<T extends Model> {
-  private model: ModelStatic<T>;
+  private readonly model: ModelCtor<T>;
 
-  constructor(model: ModelStatic<T>) {
+  constructor(model: ModelCtor<T>) {
     this.model = model;
   }
 

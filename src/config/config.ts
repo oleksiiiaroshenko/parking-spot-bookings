@@ -41,7 +41,7 @@ const config = convict({
     password: {
       doc: 'Database password',
       format: String,
-      default: '',
+      default: 'password',
       env: 'DB_PASSWORD',
       sensitive: true,
     },
