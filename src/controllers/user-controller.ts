@@ -5,12 +5,8 @@ import { ResponseHelper } from '../utils';
 import { IUserController, IUserRequest, IUserService } from '../interfaces';
 
 export class UserController implements IUserController {
-  private readonly userService: IUserService;
-
-  constructor(userService: IUserService) {
+  constructor(private readonly userService: IUserService) {
     logger.debug('ctor');
-
-    this.userService = userService;
   }
 
   async createUser(req: Request, res: Response, next: NextFunction): Promise<void> {

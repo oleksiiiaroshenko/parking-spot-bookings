@@ -1,5 +1,5 @@
-export class CreateBookingDto {
-  parkingSpotId!: number;
-  startDateTime!: Date;
-  endDateTime!: Date;
-}
+export type CreateBookingDto = {
+  parkingSpotId: number;
+  startDateTime: Date;
+  endDateTime: Date;
+};

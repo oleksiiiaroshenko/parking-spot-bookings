@@ -5,12 +5,8 @@ import { ResponseHelper } from '../utils';
 import { IBookingController, IBookingService, IUserRequest } from '../interfaces';
 
 export class BookingController implements IBookingController {
-  private bookingService: IBookingService;
-
-  constructor(bookingService: IBookingService) {
+  constructor(private readonly bookingService: IBookingService) {
     logger.debug('ctor');
-
-    this.bookingService = bookingService;
   }
 
   async createBooking(req: IUserRequest, res: Response, next: NextFunction): Promise<void> {
@@ -52,7 +48,6 @@ export class BookingController implements IBookingController {
   async updateBooking(req: IUserRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const updateBookingDto: UpdateBookingDto = {
-        ...req.body,
         endDateTime: new Date(req.body.endDateTime),
       };
 

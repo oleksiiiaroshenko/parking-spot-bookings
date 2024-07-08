@@ -1,3 +1,3 @@
-export class UpdateBookingDto {
-  endDateTime!: Date;
-}
+export type UpdateBookingDto = {
+  endDateTime: Date;
+};

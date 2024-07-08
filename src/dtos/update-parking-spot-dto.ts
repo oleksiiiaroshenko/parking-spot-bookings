@@ -1,3 +1,3 @@
-export class UpdateParkingSpotDto {
+export type UpdateParkingSpotDto = {
   name?: string;
-}
+};

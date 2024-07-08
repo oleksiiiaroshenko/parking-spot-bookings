@@ -6,12 +6,8 @@ import createError from 'http-errors';
 import { IBookingService, IDatabaseService } from '../interfaces';
 
 export class BookingService implements IBookingService {
-  private readonly databaseService: IDatabaseService;
-
-  constructor(databaseService: IDatabaseService) {
+  constructor(private readonly databaseService: IDatabaseService) {
     logger.debug('BookingService.ctor');
-
-    this.databaseService = databaseService;
   }
 
   async createBooking(userId: number, createBookingDto: CreateBookingDto): Promise<Booking> {

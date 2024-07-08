@@ -5,12 +5,8 @@ import { ResponseHelper } from '../utils';
 import { IParkingSpotService, IUserRequest } from '../interfaces';
 
 export class ParkingSpotController {
-  private readonly parkingSpotService: IParkingSpotService;
-
-  constructor(parkingSpotService: IParkingSpotService) {
+  constructor(private readonly parkingSpotService: IParkingSpotService) {
     logger.debug('ParkingSpotController.ctor');
-
-    this.parkingSpotService = parkingSpotService;
   }
 
   async createParkingSpot(req: IUserRequest, res: Response, next: NextFunction): Promise<void> {

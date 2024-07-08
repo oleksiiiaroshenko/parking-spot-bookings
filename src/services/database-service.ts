@@ -7,10 +7,8 @@ import { WhereOptions } from 'sequelize';
 import { IDatabase, IDatabaseService } from '../interfaces';
 
 class Database<T extends Model> implements IDatabase<T> {
-  private readonly model: ModelCtor<T>;
-
-  constructor(model: ModelCtor<T>) {
-    this.model = model;
+  constructor(private readonly model: ModelCtor<T>) {
+    logger.debug('ctor');
   }
 
   async create(data: T['_creationAttributes']): Promise<T> {

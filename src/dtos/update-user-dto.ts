@@ -1,9 +1,9 @@
 import { UserRole } from '../enums';
 
-export class UpdateUserDto {
+export type UpdateUserDto = {
   firstName?: string;
   lastName?: string;
   email?: string;
   role?: UserRole;
   token?: string;
-}
+};
