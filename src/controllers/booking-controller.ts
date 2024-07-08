@@ -1,14 +1,13 @@
 import { Response, NextFunction } from 'express';
-import { BookingService } from '../services';
 import { CreateBookingDto, UpdateBookingDto } from '../dtos';
 import { logger } from '../config';
 import { ResponseHelper } from '../utils';
-import { IUserRequest } from '../interfaces';
+import { IBookingService, IUserRequest } from '../interfaces';
 
 export class BookingController {
-  private bookingService: BookingService;
+  private bookingService: IBookingService;
 
-  constructor(bookingService: BookingService) {
+  constructor(bookingService: IBookingService) {
     logger.debug('ctor');
 
     this.bookingService = bookingService;

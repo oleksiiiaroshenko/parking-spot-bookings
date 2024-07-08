@@ -4,8 +4,9 @@ import { config, logger } from '../config';
 
 import createError from 'http-errors';
 import { WhereOptions } from 'sequelize';
+import { IDatabase, IDatabaseService } from '../interfaces';
 
-class Database<T extends Model> {
+class Database<T extends Model> implements IDatabase<T> {
   private readonly model: ModelCtor<T>;
 
   constructor(model: ModelCtor<T>) {
@@ -84,11 +85,11 @@ class Database<T extends Model> {
   }
 }
 
-export class DatabaseService {
-  private sequelize: Sequelize;
-  private _users: Database<User>;
-  private _parkingSpots: Database<ParkingSpot>;
-  private _bookings: Database<Booking>;
+export class DatabaseService implements IDatabaseService {
+  private readonly sequelize: Sequelize;
+  private readonly _users: Database<User>;
+  private readonly _parkingSpots: Database<ParkingSpot>;
+  private readonly _bookings: Database<Booking>;
 
   constructor() {
     logger.debug('DatabaseService.ctor');
@@ -122,15 +123,15 @@ export class DatabaseService {
     }
   }
 
-  get users(): Database<User> {
+  get users(): IDatabase<User> {
     return this._users;
   }
 
-  get parkingSpots(): Database<ParkingSpot> {
+  get parkingSpots(): IDatabase<ParkingSpot> {
     return this._parkingSpots;
   }
 
-  get bookings(): Database<Booking> {
+  get bookings(): IDatabase<Booking> {
     return this._bookings;
   }
 }

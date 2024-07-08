@@ -2,13 +2,13 @@ import { User } from '../models';
 import { logger } from '../config';
 import { CreateUserDto, UpdateUserDto } from '../dtos';
 import { UserRole } from '../enums';
-import { DatabaseService } from '.';
+import { IDatabaseService, IUserService } from '../interfaces';
 import createError from 'http-errors';
 
-export class UserService {
-  private databaseService: DatabaseService;
+export class UserService implements IUserService {
+  private readonly databaseService: IDatabaseService;
 
-  constructor(databaseService: DatabaseService) {
+  constructor(databaseService: IDatabaseService) {
     logger.debug('UserService.ctor');
 
     this.databaseService = databaseService;
@@ -44,7 +44,7 @@ export class UserService {
     return user;
   }
 
-  async updateUser(user: User, id: string, updateUserDto: UpdateUserDto) {
+  async updateUser(user: User, id: string, updateUserDto: UpdateUserDto): Promise<User> {
     logger.debug('UserService.update user:', { user, id, updateUserDto });
 
     const userToUpdate = await this.findUserById(id);

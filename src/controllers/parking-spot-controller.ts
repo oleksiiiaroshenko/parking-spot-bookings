@@ -1,14 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import { ParkingSpotService } from '../services';
 import { CreateParkingSpotDto, UpdateParkingSpotDto } from '../dtos';
 import { logger } from '../config';
 import { ResponseHelper } from '../utils';
-import { IUserRequest } from '../interfaces';
+import { IParkingSpotService, IUserRequest } from '../interfaces';
 
 export class ParkingSpotController {
-  private parkingSpotService: ParkingSpotService;
+  private readonly parkingSpotService: IParkingSpotService;
 
-  constructor(parkingSpotService: ParkingSpotService) {
+  constructor(parkingSpotService: IParkingSpotService) {
     logger.debug('ParkingSpotController.ctor');
 
     this.parkingSpotService = parkingSpotService;

@@ -1,15 +1,15 @@
 import { Router } from 'express';
 import { authMiddleware, bodyValidationMiddleware } from '../middlewares';
-import { ParkingSpotService, DatabaseService } from '../services';
 import { parkingSpotCreationSchema, parkingSpotUpdateSchema } from '../validation-schemas';
 import { ParkingSpotController } from '../controllers';
 import { logger } from '../config';
+import { IDatabaseService, IParkingSpotService } from '../interfaces';
 
 export class ParkingSpotRouter {
   private router!: Router;
   private controller!: ParkingSpotController;
 
-  constructor(databaseService: DatabaseService, parkingSpotService: ParkingSpotService) {
+  constructor(databaseService: IDatabaseService, parkingSpotService: IParkingSpotService) {
     logger.debug('ParkingSpotRouter.ctor');
 
     this.createController(parkingSpotService);
@@ -22,13 +22,13 @@ export class ParkingSpotRouter {
     return this.router;
   }
 
-  private createController(parkingSpotService: ParkingSpotService): void {
+  private createController(parkingSpotService: IParkingSpotService): void {
     console.log('ParkingSpotRouter.create controller');
 
     this.controller = new ParkingSpotController(parkingSpotService);
   }
 
-  private createRouter(databaseService: DatabaseService): void {
+  private createRouter(databaseService: IDatabaseService): void {
     logger.debug('ParkingSpotRouter.create router');
 
     this.router = Router();

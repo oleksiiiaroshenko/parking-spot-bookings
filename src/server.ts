@@ -6,13 +6,14 @@ import { config, logger } from './config';
 import { errorHandler } from './middlewares';
 import createError from 'http-errors';
 import { UserRouter, ParkingSpotRouter, BookingRouter } from './routers';
+import { IBookingService, IDatabaseService, IParkingSpotService, IUserService } from './interfaces';
 
 export default class Server {
   private app!: Express;
-  private databaseService!: DatabaseService;
-  private userService!: UserService;
-  private parkingSpotService!: ParkingSpotService;
-  private bookingService!: BookingService;
+  private databaseService!: IDatabaseService;
+  private userService!: IUserService;
+  private parkingSpotService!: IParkingSpotService;
+  private bookingService!: IBookingService;
   private userRouter!: UserRouter;
   private parkingSpotRouter!: ParkingSpotRouter;
   private bookingRouter!: BookingRouter;

@@ -2,13 +2,13 @@ import { User, ParkingSpot } from '../models';
 import { logger } from '../config';
 import { CreateParkingSpotDto, UpdateParkingSpotDto } from '../dtos';
 import { UserRole } from '../enums';
-import { DatabaseService } from '.';
 import createError from 'http-errors';
+import { IDatabaseService, IParkingSpotService } from '../interfaces';
 
-export class ParkingSpotService {
-  private databaseService: DatabaseService;
+export class ParkingSpotService implements IParkingSpotService {
+  private readonly databaseService: IDatabaseService;
 
-  constructor(databaseService: DatabaseService) {
+  constructor(databaseService: IDatabaseService) {
     logger.debug('ParkingSpotService.ctor');
 
     this.databaseService = databaseService;
@@ -39,7 +39,7 @@ export class ParkingSpotService {
     return parkingSpot;
   }
 
-  async updateParkingSpot(user: User, id: string, updateParkingSpotDto: UpdateParkingSpotDto) {
+  async updateParkingSpot(user: User, id: string, updateParkingSpotDto: UpdateParkingSpotDto): Promise<ParkingSpot> {
     logger.debug('ParkingSpotService.update parking spot:', { user, id, updateParkingSpotDto });
 
     if (user.role !== UserRole.ADMIN) {

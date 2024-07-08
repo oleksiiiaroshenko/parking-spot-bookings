@@ -2,26 +2,49 @@ import { BookingService } from '../../src/services';
 import { CreateBookingDto, UpdateBookingDto } from '../../src/dtos';
 import { UserRole } from '../../src/enums';
 import createError from 'http-errors';
-import { User, Booking } from '../../src/models';
-
-const mockDatabaseService = {
-  parkingSpots: {
-    findById: jest.fn(),
-  },
-  bookings: {
-    create: jest.fn(),
-    findAll: jest.fn(),
-    findById: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-  },
-};
+import { User, Booking, ParkingSpot } from '../../src/models';
+import { IDatabaseService, IDatabase } from '../../src/interfaces';
 
 describe('BookingService', () => {
   let bookingService: BookingService;
+  let mockDatabaseService: jest.Mocked<IDatabaseService>;
 
   beforeEach(() => {
-    bookingService = new BookingService(mockDatabaseService as any);
+    const mockBookingDatabase: jest.Mocked<IDatabase<Booking>> = {
+      create: jest.fn(),
+      update: jest.fn(),
+      findById: jest.fn(),
+      findOne: jest.fn(),
+      findAll: jest.fn(),
+      delete: jest.fn(),
+    };
+
+    const mockParkingSpotDatabase: jest.Mocked<IDatabase<ParkingSpot>> = {
+      create: jest.fn(),
+      update: jest.fn(),
+      findById: jest.fn(),
+      findOne: jest.fn(),
+      findAll: jest.fn(),
+      delete: jest.fn(),
+    };
+
+    const mockUserDatabase: jest.Mocked<IDatabase<User>> = {
+      create: jest.fn(),
+      update: jest.fn(),
+      findById: jest.fn(),
+      findOne: jest.fn(),
+      findAll: jest.fn(),
+      delete: jest.fn(),
+    };
+
+    mockDatabaseService = {
+      users: mockUserDatabase,
+      parkingSpots: mockParkingSpotDatabase,
+      bookings: mockBookingDatabase,
+      init: jest.fn(),
+    };
+
+    bookingService = new BookingService(mockDatabaseService);
   });
 
   afterEach(() => {
@@ -38,8 +61,8 @@ describe('BookingService', () => {
       };
       const mockBooking = { id: 1, ...createBookingDto, userId };
 
-      mockDatabaseService.parkingSpots.findById.mockResolvedValue(true);
-      mockDatabaseService.bookings.create.mockResolvedValue(mockBooking);
+      (mockDatabaseService.parkingSpots.findById as jest.Mock).mockResolvedValue({} as ParkingSpot);
+      (mockDatabaseService.bookings.create as jest.Mock).mockResolvedValue(mockBooking);
 
       const result = await bookingService.createBooking(userId, createBookingDto);
 
@@ -56,7 +79,7 @@ describe('BookingService', () => {
         endDateTime: new Date(),
       };
 
-      mockDatabaseService.parkingSpots.findById.mockResolvedValue(null);
+      (mockDatabaseService.parkingSpots.findById as jest.Mock).mockResolvedValue(null);
 
       await expect(bookingService.createBooking(userId, createBookingDto)).rejects.toThrow(createError.BadRequest('Invalid parking spot id'));
 
@@ -70,7 +93,7 @@ describe('BookingService', () => {
       const adminUser: User = { id: 1, role: UserRole.ADMIN } as User;
       const mockBookings: Booking[] = [{ id: 1, userId: 1 } as Booking];
 
-      mockDatabaseService.bookings.findAll.mockResolvedValue(mockBookings);
+      (mockDatabaseService.bookings.findAll as jest.Mock).mockResolvedValue(mockBookings);
 
       const result = await bookingService.getBookings(adminUser);
 
@@ -79,15 +102,15 @@ describe('BookingService', () => {
     });
 
     it('should get bookings for regular user', async () => {
-      const regularUser: User = { id: 1, role: UserRole.STANDARD } as User;
+      const standardUser: User = { id: 1, role: UserRole.STANDARD } as User;
       const mockBookings: Booking[] = [{ id: 1, userId: 1 } as Booking];
 
-      mockDatabaseService.bookings.findAll.mockResolvedValue(mockBookings);
+      (mockDatabaseService.bookings.findAll as jest.Mock).mockResolvedValue(mockBookings);
 
-      const result = await bookingService.getBookings(regularUser);
+      const result = await bookingService.getBookings(standardUser);
 
       expect(result).toEqual(mockBookings);
-      expect(mockDatabaseService.bookings.findAll).toHaveBeenCalledWith({ userId: regularUser.id });
+      expect(mockDatabaseService.bookings.findAll).toHaveBeenCalledWith({ userId: standardUser.id });
     });
   });
 
@@ -96,7 +119,7 @@ describe('BookingService', () => {
       const adminUser: User = { id: 1, role: UserRole.ADMIN } as User;
       const mockBooking: Booking = { id: 1, userId: 2 } as Booking;
 
-      mockDatabaseService.bookings.findById.mockResolvedValue(mockBooking);
+      (mockDatabaseService.bookings.findById as jest.Mock).mockResolvedValue(mockBooking);
 
       const result = await bookingService.getBookingById(adminUser, '1');
 
@@ -105,24 +128,24 @@ describe('BookingService', () => {
     });
 
     it('should get booking by id for the owner of the booking', async () => {
-      const regularUser: User = { id: 1, role: UserRole.STANDARD } as User;
+      const standardUser: User = { id: 1, role: UserRole.STANDARD } as User;
       const mockBooking: Booking = { id: 1, userId: 1 } as Booking;
 
-      mockDatabaseService.bookings.findById.mockResolvedValue(mockBooking);
+      (mockDatabaseService.bookings.findById as jest.Mock).mockResolvedValue(mockBooking);
 
-      const result = await bookingService.getBookingById(regularUser, '1');
+      const result = await bookingService.getBookingById(standardUser, '1');
 
       expect(result).toEqual(mockBooking);
       expect(mockDatabaseService.bookings.findById).toHaveBeenCalledWith(1);
     });
 
     it("should throw an error if a regular user tries to access another user's booking", async () => {
-      const regularUser: User = { id: 1, role: UserRole.STANDARD } as User;
+      const standardUser: User = { id: 1, role: UserRole.STANDARD } as User;
       const mockBooking: Booking = { id: 1, userId: 2 } as Booking;
 
-      mockDatabaseService.bookings.findById.mockResolvedValue(mockBooking);
+      (mockDatabaseService.bookings.findById as jest.Mock).mockResolvedValue(mockBooking);
 
-      await expect(bookingService.getBookingById(regularUser, '1')).rejects.toThrow(createError.Forbidden('Access denied'));
+      await expect(bookingService.getBookingById(standardUser, '1')).rejects.toThrow(createError.Forbidden('Access denied'));
 
       expect(mockDatabaseService.bookings.findById).toHaveBeenCalledWith(1);
     });
@@ -130,14 +153,14 @@ describe('BookingService', () => {
 
   describe('updateBooking', () => {
     it('should update booking for the owner of the booking', async () => {
-      const regularUser: User = { id: 1, role: UserRole.STANDARD } as User;
+      const standardUser: User = { id: 1, role: UserRole.STANDARD } as User;
       const mockBooking: Booking = { id: 1, userId: 1, startDateTime: new Date(), endDateTime: new Date() } as Booking;
       const updateBookingDto: UpdateBookingDto = { endDateTime: new Date(mockBooking.startDateTime.getTime() + 3600000) };
 
-      mockDatabaseService.bookings.findById.mockResolvedValue(mockBooking);
-      mockDatabaseService.bookings.update.mockResolvedValue({ ...mockBooking, ...updateBookingDto });
+      (mockDatabaseService.bookings.findById as jest.Mock).mockResolvedValue(mockBooking);
+      (mockDatabaseService.bookings.update as jest.Mock).mockResolvedValue({ ...mockBooking, ...updateBookingDto });
 
-      const result = await bookingService.updateBooking(regularUser, '1', updateBookingDto);
+      const result = await bookingService.updateBooking(standardUser, '1', updateBookingDto);
 
       expect(result).toEqual({ ...mockBooking, ...updateBookingDto });
       expect(mockDatabaseService.bookings.findById).toHaveBeenCalledWith(1);
@@ -145,13 +168,13 @@ describe('BookingService', () => {
     });
 
     it('should throw an error if end date time is before start date time', async () => {
-      const regularUser: User = { id: 1, role: UserRole.STANDARD } as User;
+      const standardUser: User = { id: 1, role: UserRole.STANDARD } as User;
       const mockBooking: Booking = { id: 1, userId: 1, startDateTime: new Date(), endDateTime: new Date() } as Booking;
       const updateBookingDto: UpdateBookingDto = { endDateTime: new Date(mockBooking.startDateTime.getTime() - 3600000) };
 
-      mockDatabaseService.bookings.findById.mockResolvedValue(mockBooking);
+      (mockDatabaseService.bookings.findById as jest.Mock).mockResolvedValue(mockBooking);
 
-      await expect(bookingService.updateBooking(regularUser, '1', updateBookingDto)).rejects.toThrow(
+      await expect(bookingService.updateBooking(standardUser, '1', updateBookingDto)).rejects.toThrow(
         createError.BadRequest('End date time cannot be before start date'),
       );
 
@@ -162,12 +185,12 @@ describe('BookingService', () => {
 
   describe('deleteBooking', () => {
     it('should delete booking for the owner of the booking', async () => {
-      const regularUser: User = { id: 1, role: UserRole.STANDARD } as User;
+      const standardUser: User = { id: 1, role: UserRole.STANDARD } as User;
       const mockBooking: Booking = { id: 1, userId: 1 } as Booking;
 
-      mockDatabaseService.bookings.findById.mockResolvedValue(mockBooking);
+      (mockDatabaseService.bookings.findById as jest.Mock).mockResolvedValue(mockBooking);
 
-      const result = await bookingService.deleteBooking(regularUser, '1');
+      const result = await bookingService.deleteBooking(standardUser, '1');
 
       expect(result).toEqual(mockBooking);
       expect(mockDatabaseService.bookings.findById).toHaveBeenCalledWith(1);
@@ -175,12 +198,12 @@ describe('BookingService', () => {
     });
 
     it("should throw an error if a regular user tries to delete another user's booking", async () => {
-      const regularUser: User = { id: 1, role: UserRole.STANDARD } as User;
+      const standardUser: User = { id: 1, role: UserRole.STANDARD } as User;
       const mockBooking: Booking = { id: 1, userId: 2 } as Booking;
 
-      mockDatabaseService.bookings.findById.mockResolvedValue(mockBooking);
+      (mockDatabaseService.bookings.findById as jest.Mock).mockResolvedValue(mockBooking);
 
-      await expect(bookingService.deleteBooking(regularUser, '1')).rejects.toThrow(createError.Forbidden('Access denied'));
+      await expect(bookingService.deleteBooking(standardUser, '1')).rejects.toThrow(createError.Forbidden('Access denied'));
 
       expect(mockDatabaseService.bookings.findById).toHaveBeenCalledWith(1);
       expect(mockDatabaseService.bookings.delete).not.toHaveBeenCalled();

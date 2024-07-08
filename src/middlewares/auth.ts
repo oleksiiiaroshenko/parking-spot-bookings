@@ -1,10 +1,9 @@
 import { Response, NextFunction } from 'express';
 import { logger } from '../config';
 import createError from 'http-errors';
-import { DatabaseService } from '../services';
-import { IUserRequest } from '../interfaces';
+import { IDatabaseService, IUserRequest } from '../interfaces';
 
-export default (databaseService: DatabaseService) => async (req: IUserRequest, res: Response, next: NextFunction) => {
+export default (databaseService: IDatabaseService) => async (req: IUserRequest, res: Response, next: NextFunction) => {
   try {
     const token = req.headers['authorization'];
     if (!token) {

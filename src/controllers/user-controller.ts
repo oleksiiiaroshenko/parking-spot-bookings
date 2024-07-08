@@ -1,14 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import { UserService } from '../services';
 import { CreateUserDto, UpdateUserDto } from '../dtos';
 import { logger } from '../config';
 import { ResponseHelper } from '../utils';
-import { IUserRequest } from '../interfaces';
+import { IUserRequest, IUserService } from '../interfaces';
 
 export class UserController {
-  private userService: UserService;
+  private readonly userService: IUserService;
 
-  constructor(userService: UserService) {
+  constructor(userService: IUserService) {
     logger.debug('ctor');
 
     this.userService = userService;

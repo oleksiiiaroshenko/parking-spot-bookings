@@ -1,15 +1,15 @@
 import { Router } from 'express';
 import { authMiddleware, bodyValidationMiddleware } from '../middlewares';
-import { UserService, DatabaseService } from '../services';
 import { userCreationSchema, userUpdateSchema } from '../validation-schemas';
 import { UserController } from '../controllers';
 import { logger } from '../config';
+import { IDatabaseService, IUserService } from '../interfaces';
 
 export class UserRouter {
   private router!: Router;
   private controller!: UserController;
 
-  constructor(databaseService: DatabaseService, userService: UserService) {
+  constructor(databaseService: IDatabaseService, userService: IUserService) {
     logger.debug('UserRouter.ctor');
 
     this.createController(userService);
@@ -22,13 +22,13 @@ export class UserRouter {
     return this.router;
   }
 
-  private createController(userService: UserService): void {
+  private createController(userService: IUserService): void {
     console.log('UserRouter.create controller');
 
     this.controller = new UserController(userService);
   }
 
-  private createRouter(databaseService: DatabaseService): void {
+  private createRouter(databaseService: IDatabaseService): void {
     logger.debug('UserRouter.create router');
 
     this.router = Router();

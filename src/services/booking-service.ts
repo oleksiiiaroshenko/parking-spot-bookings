@@ -2,13 +2,13 @@ import { User, Booking } from '../models';
 import { logger } from '../config';
 import { CreateBookingDto, UpdateBookingDto } from '../dtos';
 import { UserRole } from '../enums';
-import { DatabaseService } from '.';
 import createError from 'http-errors';
+import { IBookingService, IDatabaseService } from '../interfaces';
 
-export class BookingService {
-  private databaseService: DatabaseService;
+export class BookingService implements IBookingService {
+  private readonly databaseService: IDatabaseService;
 
-  constructor(databaseService: DatabaseService) {
+  constructor(databaseService: IDatabaseService) {
     logger.debug('BookingService.ctor');
 
     this.databaseService = databaseService;
@@ -47,7 +47,7 @@ export class BookingService {
     return booking;
   }
 
-  async updateBooking(user: User, id: string, updateBookingDto: UpdateBookingDto) {
+  async updateBooking(user: User, id: string, updateBookingDto: UpdateBookingDto): Promise<Booking> {
     logger.debug('BookingService.update booking:', { user, id, updateBookingDto });
 
     const booking = await this.findBookingById(id);
