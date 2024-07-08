@@ -1,0 +1,241 @@
+{
+	"info": {
+		"_postman_id": "d2ece7ad-d4c7-44cc-86e4-17dd9057e2c8",
+		"name": "parking-spot-bookings",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2390206",
+		"_collection_link": "https://lively-resonance-222645.postman.co/workspace/avanquest~9b8e4c33-e905-4b9d-8ad3-e1be2c571264/collection/2390206-d2ece7ad-d4c7-44cc-86e4-17dd9057e2c8?action=share&source=collection_link&creator=2390206"
+	},
+	"item": [
+		{
+			"name": "get-bookings",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "token_3",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/bookings",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"bookings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"alexey4\",\r\n    \"lastName\": \"yaroshenko4\",\r\n    \"email\": \"test4@test.com\",\r\n    \"role\": \"standard\",\r\n    \"token\": \"token_4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/users",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-booking",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "token_4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"parkingSpotId\": 1,\r\n    \"startDateTime\": \"2024-07-07T09:00:00.000Z\",\r\n    \"endDateTime\": \"2024-07-07T10:00:00.000Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/bookings",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"bookings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete-booking",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "token_3",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/bookings/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"bookings",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-booking",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "token_3",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"endDateTime\": \"2024-07-07T12:00:00.000Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/bookings/2",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"bookings",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-parking-spot",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "token_3",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"parkingspot1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/parking-spots",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"parking-spots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-users",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "token_3",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/users",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-parking-spots",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "token_1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/parking-spots",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"parking-spots"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
