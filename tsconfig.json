@@ -8,8 +8,9 @@
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "outDir": "./dist",
-    "rootDir": "."
+    "rootDir": "./src",
+    "sourceMap": true
   },
-  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }
