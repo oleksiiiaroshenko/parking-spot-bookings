@@ -6,12 +6,8 @@ import createError from 'http-errors';
 import { IDatabaseService, IParkingSpotService } from '../interfaces';
 
 export class ParkingSpotService implements IParkingSpotService {
-  private readonly databaseService: IDatabaseService;
-
-  constructor(databaseService: IDatabaseService) {
+  constructor(private readonly databaseService: IDatabaseService) {
     logger.debug('ParkingSpotService.ctor');
-
-    this.databaseService = databaseService;
   }
 
   async createParkingSpot(user: User, createParkingSpotDto: CreateParkingSpotDto): Promise<ParkingSpot> {
