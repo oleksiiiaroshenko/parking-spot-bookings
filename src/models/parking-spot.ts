@@ -8,14 +8,14 @@ export class ParkingSpot extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
-  id!: number;
+  declare id: number;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  name!: string;
+  declare name: string;
 
   @HasMany(() => Booking)
-  bookings!: Booking[];
+  declare bookings: Booking[];
 }

@@ -8,31 +8,31 @@ export class Booking extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
-  id!: number;
+  declare id: number;
 
   @ForeignKey(() => User)
   @Column(DataType.INTEGER)
-  userId!: number;
+  declare userId: number;
 
   @BelongsTo(() => User)
-  user!: User;
+  declare user: User;
 
   @ForeignKey(() => ParkingSpot)
   @Column(DataType.INTEGER)
-  parkingSpotId!: number;
+  declare parkingSpotId: number;
 
   @BelongsTo(() => ParkingSpot)
-  parkingSpot!: ParkingSpot;
+  declare parkingSpot: ParkingSpot;
 
   @Column({
     type: DataType.DATE,
     allowNull: false,
   })
-  startDateTime!: Date;
+  declare startDateTime: Date;
 
   @Column({
     type: DataType.DATE,
     allowNull: false,
   })
-  endDateTime!: Date;
+  declare endDateTime: Date;
 }
