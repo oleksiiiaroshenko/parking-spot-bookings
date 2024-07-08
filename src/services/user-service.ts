@@ -6,12 +6,8 @@ import { IDatabaseService, IUserService } from '../interfaces';
 import createError from 'http-errors';
 
 export class UserService implements IUserService {
-  private readonly databaseService: IDatabaseService;
-
-  constructor(databaseService: IDatabaseService) {
+  constructor(private readonly databaseService: IDatabaseService) {
     logger.debug('UserService.ctor');
-
-    this.databaseService = databaseService;
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
